@@ -86,9 +86,6 @@ function App() {
             </>
         );
     }
-    // todo: 페이징 처리 구현
-    const pagingRender = () => {
-    }
     return (
         <div>
             <h1>TODO List</h1>
