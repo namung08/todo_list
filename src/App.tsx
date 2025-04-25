@@ -4,7 +4,7 @@ import {getCookies, removeCookies, setCookies} from "./funcrtion/Cookie.tsx";
 
 function App() {
     const [data, setData] = useState(String);
-    const [todoList, setTodoList] = useState(Array<{id: number, detail: string}>)
+    const [todoList, setTodoList] = useState(Array<{id: number, number: number, detail: string}>)
 
     useEffect(() => {
         // 처음 렌더링 시 쿠키 설정
@@ -15,11 +15,16 @@ function App() {
         }
 
         // 데이터가 있을 경우 내용 저장
-        const temp:Array<{id:number, detail: string}> = [];
+        const temp:Array<{id:number, number: number, detail: string}> = [];
+        let seq = 1;
         for(let i = 1; i <= number; i++) {
             const data = getCookies(String(i))
-            const todo = {id: i, detail: data};
-            temp.push(todo);
+
+            if(data) {
+                const todo = {id: i, number: seq, detail: data};
+                temp.push(todo);
+                seq++;
+            }
         }
         setTodoList(temp);
     }, []);
@@ -44,6 +49,11 @@ function App() {
             window.location.reload();
         }
 
+        const remove = (id: number) => {
+            removeCookies(String(id));
+            window.location.reload();
+        }
+
         return (
             <>
                 <div>
@@ -53,8 +63,10 @@ function App() {
                     <table border={1}>
                         <thead>
                         <tr>
+                            <th>고유값</th>
                             <th>번호</th>
                             <th>내용</th>
+                            <th>삭제</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -62,7 +74,9 @@ function App() {
                             return(
                                 <tr key={value.id}>
                                     <td>{value.id}</td>
+                                    <td>{value.number}</td>
                                     <td>{value.detail}</td>
+                                    <td><button onClick={() => remove(value.id)}>🗑</button></td>
                                 </tr>
                             )
                         })}
