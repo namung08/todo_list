@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import './App.css'
-import {getCookies, setCookies} from "./funcrtion/Cookie.tsx";
+import {getCookies, removeCookies, setCookies} from "./funcrtion/Cookie.tsx";
 
 function App() {
     const [data, setData] = useState(String);
@@ -32,27 +32,44 @@ function App() {
     }
 
     const todoListRender = () => {
+        const removeAll = () => {
+
+            const number = (getCookies("ListNumber"));
+            for(let i = 1; i <= number; i++) {
+                removeCookies(String(i));
+            }
+
+            setCookies("ListNumber", "0");
+
+            window.location.reload();
+        }
+
         return (
-            <div>
-                <table border={1}>
-                    <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>내용</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {todoList.map(value => {
-                        return(
-                            <tr key={value.id}>
-                                <td>{value.id}</td>
-                                <td>{value.detail}</td>
-                            </tr>
-                        )
-                    })}
-                    </tbody>
-                </table>
-            </div>
+            <>
+                <div>
+                    <button onClick={removeAll}>remove all</button>
+                </div>
+                <div>
+                    <table border={1}>
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>내용</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {todoList.map(value => {
+                            return(
+                                <tr key={value.id}>
+                                    <td>{value.id}</td>
+                                    <td>{value.detail}</td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
+                </div>
+            </>
         );
     }
 
